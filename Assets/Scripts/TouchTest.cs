@@ -4,19 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TouchTest : MonoBehaviour {
-    GameObject gObj = null;
+    GameObject gameObjectThatWasTouched = null;
+
+    // set in the editor
     public Text displayTouchesText;
-
-    Ray GenerateMouseRay(Vector3 touchPos)
-    {
-        Vector3 mousePosFar = new Vector3(touchPos.x, touchPos.y, Camera.main.farClipPlane);
-        Vector3 mousePosNear = new Vector3(touchPos.x, touchPos.y, Camera.main.nearClipPlane);
-        Vector3 mousePosF = Camera.main.ScreenToWorldPoint(mousePosFar);
-        Vector3 mousePosN = Camera.main.ScreenToWorldPoint(mousePosNear);
-
-        Ray mr = new Ray(mousePosN, mousePosF - mousePosN);
-        return mr;
-    }
 
     void Update()
     {
@@ -29,8 +20,8 @@ public class TouchTest : MonoBehaviour {
 
                 if (Physics.Raycast(mouseRay.origin, mouseRay.direction, out hit))
                 {
-                    gObj = hit.transform.gameObject;
-                    displayTouchesText.text = "You touched: " + gObj.tag;
+                    gameObjectThatWasTouched = hit.transform.gameObject;
+                    displayTouchesText.text = "You touched: " + gameObjectThatWasTouched.tag;
                 }
                 else
                 {
@@ -38,5 +29,16 @@ public class TouchTest : MonoBehaviour {
                 }
             }
         }
+    }
+
+    Ray GenerateMouseRay(Vector3 touchPos)
+    {
+        Vector3 mousePosFar = new Vector3(touchPos.x, touchPos.y, Camera.main.farClipPlane);
+        Vector3 mousePosNear = new Vector3(touchPos.x, touchPos.y, Camera.main.nearClipPlane);
+        Vector3 mousePosF = Camera.main.ScreenToWorldPoint(mousePosFar);
+        Vector3 mousePosN = Camera.main.ScreenToWorldPoint(mousePosNear);
+
+        Ray mr = new Ray(mousePosN, mousePosF - mousePosN);
+        return mr;
     }
 }
