@@ -22,10 +22,11 @@ public class TouchManager : MonoBehaviour {
                 if (Physics.Raycast(mouseRay.origin, mouseRay.direction, out hit))
                 {
                     gameObjectThatWasTouched = hit.transform.gameObject;
+                    Debug.Log(gameObjectThatWasTouched.tag);
                     //displayTouchesText.text = "You touched: " + gameObjectThatWasTouched.tag;
                     if(gameObjectThatWasTouched.tag == "NewGameButton")
                     {
-                        SceneManager.LoadScene("NewGameVideo", LoadSceneMode.Additive);
+                        SceneManager.LoadScene("NewGameVideo");
                     }
                 }
                 else

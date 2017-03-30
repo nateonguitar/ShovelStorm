@@ -103,7 +103,7 @@ public class GameController : MonoBehaviour {
 
         if (gameOver)
         {
-            //Debug.Log("GameOver");
+            Debug.Log("GameOver");
         }
     }
 
