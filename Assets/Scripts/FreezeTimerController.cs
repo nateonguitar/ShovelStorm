@@ -8,11 +8,11 @@ public class FreezeTimerController : MonoBehaviour {
     public Slider freezeTimer;
     private float currentPosition;
     private float modifier;
-    private GameController gameController;
+    private GamePlayController gameController;
 
     void Start()
     {
-        gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+        gameController = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayController>();
         modifier = 0.2f;
     }
 	

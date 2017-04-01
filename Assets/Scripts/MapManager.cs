@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TouchManager : MonoBehaviour {
-
+public class MapManager : MonoBehaviour {
     GameObject gameObjectThatWasTouched = null;
+    public List<GameObject> Levels = new List<GameObject>();
+    int unlockedLevel;
 
     // set in the editor
-   // public Text displayTouchesText;
+    // public Text displayTouchesText;
 
+    void Start()
+    {
+        unlockedLevel = PlayerPrefs.GetInt("unlockedLevel");
+
+        for(int i=1; i<= unlockedLevel; i++)
+        {
+            GameObject.FindWithTag("Level" + i.ToString().PadLeft(3, '0')).transform.FindChild("Lock").gameObject.SetActive(false);
+        }
+    }
     void Update()
     {
         if (Input.touchCount > 0)
@@ -23,15 +33,13 @@ public class TouchManager : MonoBehaviour {
                 {
                     gameObjectThatWasTouched = hit.transform.gameObject;
                     Debug.Log(gameObjectThatWasTouched.tag);
-                    //displayTouchesText.text = "You touched: " + gameObjectThatWasTouched.tag;
-                    if(gameObjectThatWasTouched.tag == "NewGameButton")
+
+                    if(gameObjectThatWasTouched.tag.Substring(0, 5) == "Level")
                     {
-                        SceneManager.LoadScene("NewGameVideo");
+                        int difficulty = int.Parse(gameObjectThatWasTouched.tag.Substring(5, 3));
+                        PlayerPrefs.SetInt("difficultyLevel", difficulty);
+                        SceneManager.LoadScene("GamePlayLevel");
                     }
-                }
-                else
-                {
-                    //displayTouchesText.text = "You touched the screen, but nothing hit";
                 }
             }
         }
