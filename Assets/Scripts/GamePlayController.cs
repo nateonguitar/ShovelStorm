@@ -56,13 +56,6 @@ public class GamePlayController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (tileFinished)
-        {
-            buildSwipes();
-            clearRow();
-            tileFinished = false;
-        }
-
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -86,11 +79,7 @@ public class GamePlayController : MonoBehaviour {
 
                     if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
                     {
-                        numberOfPlayerSwipesForTheCurrentTile = 0;
-                        playerSwipes.text = "";
-                        tilePlayerIsOn++;
-                        buildSwipes();
-                        freezeTimerController.ResetTimer();
+                        readyUpNextTile();
                     }
                 }
             }
@@ -106,6 +95,15 @@ public class GamePlayController : MonoBehaviour {
     void clearRow()
     {
 
+    }
+
+    void readyUpNextTile()
+    {
+        numberOfPlayerSwipesForTheCurrentTile = 0;
+        playerSwipes.text = "";
+        tilePlayerIsOn++;
+        buildSwipes();
+        freezeTimerController.ResetTimer();
     }
 
     void swipe()
@@ -180,9 +178,7 @@ public class GamePlayController : MonoBehaviour {
         swipesNeeded.text = "";
         
         numberOfSwipesNeededToCompleteCurrentTile = 3 + difficultyLevel - (shovelLevel * 2) + (tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
-        Debug.Log("Tile player is on: " + tilePlayerIsOn);
-        Debug.Log("Number of tiles til difficulty increases: " + numberOfTilesTilDifficultyIncrease);
-        Debug.Log("tilePlayerIsOn / numberOfTilesTilDifficultyIncrease: " + tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
+        
 
         // things break if set to < 1
         if (numberOfSwipesNeededToCompleteCurrentTile < 1)
