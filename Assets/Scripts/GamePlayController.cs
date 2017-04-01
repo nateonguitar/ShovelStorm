@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
+public class GamePlayController : MonoBehaviour {
     FreezeTimerController freezeTimerController;
 
     public Text swipesNeeded;
@@ -22,15 +22,15 @@ public class GameController : MonoBehaviour {
     int[] swipesToClearThisTile = new int[100];
     int[] playerSwipesForThisTile = new int[100];
     int numberOfPlayerSwipesForTheCurrentTile = 0;
-    int difficultyLevel = 1;
+    int difficultyLevel;
+    int shovelLevel;
     private bool tileFinished = false;
     public bool gameOver = false;
-
     private int numberOfSwipesNeededToCompleteCurrentTile;
 
     int tilePlayerIsOn = 0;
 
-    int numberOfTilesTilDifficultyIncrease = 4;
+    public int numberOfTilesTilDifficultyIncrease = 3;
 
     public float maxTime = 0.5f;
     public float minSwipeDist = 50f;
@@ -46,15 +46,9 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-        // for testing purposes:
-        // we will always act like this is the first time playing the game
-        PlayerPrefs.DeleteKey("hasPlayedFirstGame");
-
-        // first time ever playing this game
-        // we need to set the player prefs to the initial values
-        checkIfFirstTimePlayingInit();
-
-        freezeTimerController = GameObject.FindWithTag("GameController").GetComponent<FreezeTimerController>();
+        difficultyLevel = PlayerPrefs.GetInt("difficultyLevel");
+        shovelLevel = PlayerPrefs.GetInt("shovelLevel");
+        freezeTimerController = GameObject.FindWithTag("GamePlayController").GetComponent<FreezeTimerController>();
         buildSwipes();
         playerSwipes.text = "";
     }
@@ -65,6 +59,7 @@ public class GameController : MonoBehaviour {
         if (tileFinished)
         {
             buildSwipes();
+            clearRow();
             tileFinished = false;
         }
 
@@ -93,6 +88,7 @@ public class GameController : MonoBehaviour {
                     {
                         numberOfPlayerSwipesForTheCurrentTile = 0;
                         playerSwipes.text = "";
+                        tilePlayerIsOn++;
                         buildSwipes();
                         freezeTimerController.ResetTimer();
                     }
@@ -103,8 +99,13 @@ public class GameController : MonoBehaviour {
 
         if (gameOver)
         {
-            Debug.Log("GameOver");
+            //Debug.Log("GameOver");
         }
+    }
+
+    void clearRow()
+    {
+
     }
 
     void swipe()
@@ -119,7 +120,6 @@ public class GameController : MonoBehaviour {
             if (distance.x > 0)
             {
                 swipeDirection = (int) Directions.Right;
-                Debug.Log("Right Swipe");
             }
             else if (distance.x < 0)
             {
@@ -176,9 +176,19 @@ public class GameController : MonoBehaviour {
 
     private void buildSwipes()
     {
+        
         swipesNeeded.text = "";
-        int shovelLevel = PlayerPrefs.GetInt("shovelLevel");
-        numberOfSwipesNeededToCompleteCurrentTile = difficultyLevel - shovelLevel + (tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
+        
+        numberOfSwipesNeededToCompleteCurrentTile = 3 + difficultyLevel - (shovelLevel * 2) + (tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
+        Debug.Log("Tile player is on: " + tilePlayerIsOn);
+        Debug.Log("Number of tiles til difficulty increases: " + numberOfTilesTilDifficultyIncrease);
+        Debug.Log("tilePlayerIsOn / numberOfTilesTilDifficultyIncrease: " + tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
+
+        // things break if set to < 1
+        if (numberOfSwipesNeededToCompleteCurrentTile < 1)
+        {
+            numberOfSwipesNeededToCompleteCurrentTile = 1;
+        }
 
         for(int i=0; i<numberOfSwipesNeededToCompleteCurrentTile; i++)
         {
@@ -204,22 +214,6 @@ public class GameController : MonoBehaviour {
                 swipesToClearThisTile[i] = (int)Directions.Right;
                 swipesNeeded.text += "Right ";
             }
-        }
-    }
-
-    private void checkIfFirstTimePlayingInit()
-    {
-        string hasPlayedFirstGame = PlayerPrefs.GetString("hasPlayedFirstGame");
-
-        if (hasPlayedFirstGame != "True")
-        {
-            PlayerPrefs.SetString("hasPlayedFirstGame", "True");
-            PlayerPrefs.SetInt("difficultyLevel", 6);
-            PlayerPrefs.SetInt("shovelLevel", 2);
-            
-            PlayerPrefs.Save();
-
-            difficultyLevel = PlayerPrefs.GetInt("difficultyLevel");
         }
     }
 }
