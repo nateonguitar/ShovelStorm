@@ -56,6 +56,11 @@ public class GamePlayController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            readyUpNextTile();
+        }
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
