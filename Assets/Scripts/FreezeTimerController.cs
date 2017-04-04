@@ -9,25 +9,31 @@ public class FreezeTimerController : MonoBehaviour {
     private float currentPosition;
     private float modifier;
     private GamePlayController gameController;
+    GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
 
     void Start()
     {
+        gamePlayReadyStartAnimator = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayReadyStartAnimator>();
         gameController = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayController>();
         modifier = 0.2f;
+        freezeTimer.value = 0;
     }
 	
 	void FixedUpdate ()
     {
-		if(currentPosition <= 1)
+        if (gamePlayReadyStartAnimator.finished)
         {
-            currentPosition += Time.deltaTime * modifier;
-        }
+            if (currentPosition <= 1)
+            {
+                currentPosition += Time.deltaTime * modifier;
+            }
 
-        freezeTimer.value = currentPosition;
+            freezeTimer.value = currentPosition;
 
-        if(freezeTimer.value >= 1)
-        {
-            gameController.gameOver = true;
+            if (freezeTimer.value >= 1)
+            {
+                gameController.gameOver = true;
+            }
         }
 	}
 
