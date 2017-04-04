@@ -2,57 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour {
-    GameObject gameObjectThatWasTouched = null;
-    public List<GameObject> Levels = new List<GameObject>();
+    GameObject[] levelIcons;
     int unlockedLevel;
+    int unlockedNeighborhood;
 
     // set in the editor
     // public Text displayTouchesText;
 
     void Start()
     {
+        // fill our levelIcons with all of the level icons placed on the map in the editor
+        levelIcons = GameObject.FindGameObjectsWithTag("MapLevelIcon");
+
+        // get how far the player has unlocked
         unlockedLevel = PlayerPrefs.GetInt("unlockedLevel");
+        unlockedNeighborhood = PlayerPrefs.GetInt("unlockedNeighborhood");
 
-        for(int i=1; i<= unlockedLevel; i++)
+        // remove lock images from those that are available for the player
+        // set the text value for each level
+        for(int i=0; i < levelIcons.Length; i++)
         {
-            GameObject.FindWithTag("Level" + i.ToString().PadLeft(3, '0')).transform.FindChild("Lock").gameObject.SetActive(false);
-        }
-    }
-    void Update()
-    {
-        if (Input.touchCount > 0)
-        {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            // set the text
+            levelIcons[i].transform.FindChild("Text").GetComponent<Text>().text = levelIcons[i].GetComponent<MapLevelIcon>().level.ToString();
+
+            // remove the locks
+            if (levelIcons[i].GetComponent<MapLevelIcon>().neighborhood <= unlockedNeighborhood
+                && levelIcons[i].GetComponent<MapLevelIcon>().level <= unlockedLevel)
             {
-                Ray mouseRay = GenerateMouseRay(Input.GetTouch(0).position);
-                RaycastHit hit;
-
-                if (Physics.Raycast(mouseRay.origin, mouseRay.direction, out hit))
-                {
-                    gameObjectThatWasTouched = hit.transform.gameObject;
-                    Debug.Log(gameObjectThatWasTouched.tag);
-
-                    if(gameObjectThatWasTouched.tag.Substring(0, 5) == "Level")
-                    {
-                        int difficulty = int.Parse(gameObjectThatWasTouched.tag.Substring(5, 3));
-                        PlayerPrefs.SetInt("difficultyLevel", difficulty);
-                        SceneManager.LoadScene("GamePlayLevel");
-                    }
-                }
+                levelIcons[i].transform.FindChild("Lock").gameObject.SetActive(false);
             }
         }
     }
-
-    Ray GenerateMouseRay(Vector3 touchPos)
+    
+    public void attemptToStartLevel(int level, int neighborhood)
     {
-        Vector3 mousePosFar = new Vector3(touchPos.x, touchPos.y, Camera.main.farClipPlane);
-        Vector3 mousePosNear = new Vector3(touchPos.x, touchPos.y, Camera.main.nearClipPlane);
-        Vector3 mousePosF = Camera.main.ScreenToWorldPoint(mousePosFar);
-        Vector3 mousePosN = Camera.main.ScreenToWorldPoint(mousePosNear);
-
-        Ray mr = new Ray(mousePosN, mousePosF - mousePosN);
-        return mr;
+        if(level <= unlockedLevel && neighborhood <= unlockedNeighborhood)
+        {
+            PlayerPrefs.SetInt("levelChosenFromMap", level);
+            PlayerPrefs.SetInt("neighborhoodChosenFromMap", neighborhood);
+            SceneManager.LoadScene("GamePlayLevel");
+        }
     }
 }
