@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d13504f45ec20ae44832f30fa08e068c
-timeCreated: 1490036693
+guid: de9c6b3e4c5b39e4b9333417af3838c3
+timeCreated: 1491276013
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -44,7 +44,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0

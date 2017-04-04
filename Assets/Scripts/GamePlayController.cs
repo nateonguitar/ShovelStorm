@@ -45,6 +45,8 @@ public class GamePlayController : MonoBehaviour {
     float swipeDistance;
     float swipeTime;
 
+    public bool gamePaused = false;
+
     void Start()
     {
         difficultyLevel = PlayerPrefs.GetInt("difficultyLevel");
@@ -57,64 +59,67 @@ public class GamePlayController : MonoBehaviour {
     
     void Update()
     {
-        // swipeDirection will be Directions.None if no arrow keydown is detected
-        Directions swipeDirection = checkForKeyboardArrowControls();
-
-        //trigger a swipe based on the direction you pressed
-        if (swipeDirection != Directions.None)
+        if (!gamePaused)
         {
-            //Debug.Log(direction);
-            swipe(swipeDirection);
-            if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+            // swipeDirection will be Directions.None if no arrow keydown is detected
+            Directions swipeDirection = checkForKeyboardArrowControls();
+
+            //trigger a swipe based on the direction you pressed
+            if (swipeDirection != Directions.None)
             {
-                // build the next array of swipes
-                // increment the cell the player is on
-                // reset the freeze timer
+                //Debug.Log(direction);
+                swipe(swipeDirection);
+                if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+                {
+                    // build the next array of swipes
+                    // increment the cell the player is on
+                    // reset the freeze timer
+                    readyUpNextTile();
+                }
+            }
+
+            // clear a row if you press C
+            // for testing purposes only
+            if (Input.GetKeyDown(KeyCode.C))
+            {
                 readyUpNextTile();
             }
-        }
 
-        // clear a row if you press C
-        // for testing purposes only
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            readyUpNextTile();
-        }
-
-        // touch input controls
-        // if the number of touches on the screen is 1 or greater
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-
-            // start detecting a swipe
-            // this could also be used to detect a tap
-            // just need to see if the distance between Began and Ended is tiny
-            if (touch.phase == TouchPhase.Began)
+            // touch input controls
+            // if the number of touches on the screen is 1 or greater
+            if (Input.touchCount > 0)
             {
-                startTime = Time.time;
-                startPos = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                endTime = Time.time;
-                endPos = touch.position;
+                Touch touch = Input.GetTouch(0);
 
-                swipeDistance = (endPos - startPos).magnitude;
-                swipeTime = endTime - startTime;
 
-                // if you swiped far enough and fast enough register a swipe
-                if (swipeTime < maxTime && swipeDistance > minSwipeDist)
+                // start detecting a swipe
+                // this could also be used to detect a tap
+                // just need to see if the distance between Began and Ended is tiny
+                if (touch.phase == TouchPhase.Began)
                 {
-                    swipe();
+                    startTime = Time.time;
+                    startPos = touch.position;
+                }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    endTime = Time.time;
+                    endPos = touch.position;
 
-                    if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+                    swipeDistance = (endPos - startPos).magnitude;
+                    swipeTime = endTime - startTime;
+
+                    // if you swiped far enough and fast enough register a swipe
+                    if (swipeTime < maxTime && swipeDistance > minSwipeDist)
                     {
-                        // build the next array of swipes
-                        // increment the cell the player is on
-                        // reset the freeze timer
-                        readyUpNextTile();
+                        swipe();
+
+                        if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+                        {
+                            // build the next array of swipes
+                            // increment the cell the player is on
+                            // reset the freeze timer
+                            readyUpNextTile();
+                        }
                     }
                 }
             }
