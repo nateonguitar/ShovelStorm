@@ -23,6 +23,8 @@ public class GamePlayController : MonoBehaviour {
     int[] swipesToClearThisTile = new int[100];
     int[] playerSwipesForThisTile = new int[100];
     int numberOfPlayerSwipesForTheCurrentTile = 0;
+    int levelChosenFromMap;
+    int neighborhoodChosenFromMap;
     int difficultyLevel;
     int shovelLevel;
     private bool tileFinished = false;
@@ -49,7 +51,9 @@ public class GamePlayController : MonoBehaviour {
 
     void Start()
     {
-        difficultyLevel = PlayerPrefs.GetInt("difficultyLevel");
+        levelChosenFromMap = PlayerPrefs.GetInt("levelChosenFromMap");
+        neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
+        difficultyLevel = levelChosenFromMap * neighborhoodChosenFromMap;
         shovelLevel = PlayerPrefs.GetInt("shovelLevel");
         freezeTimerController = GameObject.FindWithTag("GamePlayController").GetComponent<FreezeTimerController>();
         buildSwipes();
