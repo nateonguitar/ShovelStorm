@@ -267,6 +267,7 @@ public class GamePlayController : MonoBehaviour {
 
     private void buildSwipes()
     {
+        Debug.Log("building swipes");
         
         swipesNeeded.text = "";
         
