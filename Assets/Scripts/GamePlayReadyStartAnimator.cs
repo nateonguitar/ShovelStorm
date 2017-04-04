@@ -9,7 +9,7 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
     public bool finished = false;
     Text readyStartText;
 
-
+    private bool animating = false;
     private bool showingReady = false;
     private bool showingStart = false;
     private float timeSinceAnimationStarted = 0;
@@ -19,6 +19,7 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
     {
         readyStartText = GameObject.FindWithTag("GamePlayReadyStartText").GetComponent<Text>();
     }
+
     public void StartAnimation()
     {
         animate();
@@ -26,34 +27,46 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
 
     void FixedUpdate()
     {
-        timeSinceAnimationStarted += Time.deltaTime;
-        animate();
+        if (animating)
+        {
+            timeSinceAnimationStarted += Time.deltaTime;
+            animate();
+        }
     }
 
     void animate()
     {
-        if (!showingReady)
+        // this is to avoid the first frame of FixedUpdate running
+        // before readyStartText is instantiated
+        if (animating)
         {
-            // show Ready
-            readyStartText.text = "Ready";
-            showingReady = true;
+
+            if (!showingReady)
+            {
+                // show Ready
+                readyStartText.text = "Ready";
+                showingReady = true;
+            }
+
+            if (timeSinceAnimationStarted >= showReadyDuration && !showingStart)
+            {
+                readyStartText.text = "Start";
+                // hide Ready
+                // show Start
+                showingStart = true;
+            }
+
+            if (timeSinceAnimationStarted >= showReadyDuration + showStartDuration)
+            {
+                // hide Start
+
+                finished = true;
+                readyStartText.text = "";
+                gameObject.GetComponent<GamePlayReadyStartAnimator>().enabled = false;
+            }
         }
 
-        if(timeSinceAnimationStarted >= showReadyDuration && !showingStart)
-        {
-            readyStartText.text = "Start";
-            // hide Ready
-            // show Start
-            showingStart = true;
-        }
 
-        if (timeSinceAnimationStarted >= showReadyDuration + showStartDuration)
-        {
-            // hide Start
-
-            finished = true;
-            readyStartText.text = "";
-            gameObject.GetComponent<GamePlayReadyStartAnimator>().enabled = false;
-        }
+        animating = true;
     }
 }
