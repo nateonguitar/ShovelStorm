@@ -14,7 +14,8 @@ public class GamePlayController : MonoBehaviour {
         Up = 0,
         Down = 1,
         Left = 2,
-        Right = 3
+        Right = 3,
+        None = 4
     }
 
 
@@ -44,6 +45,8 @@ public class GamePlayController : MonoBehaviour {
     float swipeDistance;
     float swipeTime;
 
+    public bool gamePaused = false;
+
     void Start()
     {
         difficultyLevel = PlayerPrefs.GetInt("difficultyLevel");
@@ -53,33 +56,70 @@ public class GamePlayController : MonoBehaviour {
         playerSwipes.text = "";
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (!gamePaused)
         {
-            Touch touch = Input.GetTouch(0);
+            // swipeDirection will be Directions.None if no arrow keydown is detected
+            Directions swipeDirection = checkForKeyboardArrowControls();
 
-            if (touch.phase == TouchPhase.Began)
+            //trigger a swipe based on the direction you pressed
+            if (swipeDirection != Directions.None)
             {
-                startTime = Time.time;
-                startPos = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                endTime = Time.time;
-                endPos = touch.position;
-
-                swipeDistance = (endPos - startPos).magnitude;
-                swipeTime = endTime - startTime;
-
-                if (swipeTime < maxTime && swipeDistance > minSwipeDist)
+                //Debug.Log(direction);
+                swipe(swipeDirection);
+                if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
                 {
-                    swipe();
+                    // build the next array of swipes
+                    // increment the cell the player is on
+                    // reset the freeze timer
+                    readyUpNextTile();
+                }
+            }
 
-                    if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+            // clear a row if you press C
+            // for testing purposes only
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                readyUpNextTile();
+            }
+
+            // touch input controls
+            // if the number of touches on the screen is 1 or greater
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+
+
+                // start detecting a swipe
+                // this could also be used to detect a tap
+                // just need to see if the distance between Began and Ended is tiny
+                if (touch.phase == TouchPhase.Began)
+                {
+                    startTime = Time.time;
+                    startPos = touch.position;
+                }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    endTime = Time.time;
+                    endPos = touch.position;
+
+                    swipeDistance = (endPos - startPos).magnitude;
+                    swipeTime = endTime - startTime;
+
+                    // if you swiped far enough and fast enough register a swipe
+                    if (swipeTime < maxTime && swipeDistance > minSwipeDist)
                     {
-                        readyUpNextTile();
+                        swipe();
+
+                        if (numberOfPlayerSwipesForTheCurrentTile == numberOfSwipesNeededToCompleteCurrentTile)
+                        {
+                            // build the next array of swipes
+                            // increment the cell the player is on
+                            // reset the freeze timer
+                            readyUpNextTile();
+                        }
                     }
                 }
             }
@@ -97,6 +137,33 @@ public class GamePlayController : MonoBehaviour {
 
     }
 
+    Directions checkForKeyboardArrowControls()
+    {
+        Directions swipeDirection = Directions.None;
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            swipeDirection = Directions.Up;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            swipeDirection = Directions.Down;
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            swipeDirection = Directions.Right;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            swipeDirection = Directions.Left;
+        }
+        else
+        {
+            swipeDirection = Directions.None;
+        }
+        return swipeDirection;
+    }
+
     void readyUpNextTile()
     {
         numberOfPlayerSwipesForTheCurrentTile = 0;
@@ -106,35 +173,46 @@ public class GamePlayController : MonoBehaviour {
         freezeTimerController.ResetTimer();
     }
 
-    void swipe()
+    void swipe(Directions passedInDirectionFromKeyboardControls = Directions.None)
     {
         // need to check if it is a vertical swipe or horizontal swipe first
         Vector2 distance = endPos - startPos;
 
         int swipeDirection = 0;
 
-        if (Mathf.Abs(distance.x) > Mathf.Abs(distance.y))
+        // if you swiped
+        if (passedInDirectionFromKeyboardControls == Directions.None)
         {
-            if (distance.x > 0)
+            Debug.Log("SwipeControls");
+            if (Mathf.Abs(distance.x) > Mathf.Abs(distance.y))
             {
-                swipeDirection = (int) Directions.Right;
+                if (distance.x > 0)
+                {
+                    swipeDirection = (int)Directions.Right;
+                }
+                else if (distance.x < 0)
+                {
+                    swipeDirection = (int)Directions.Left;
+                }
             }
-            else if (distance.x < 0)
+            else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
             {
-                swipeDirection = (int)Directions.Left;
+                if (distance.y > 0)
+                {
+                    swipeDirection = (int)Directions.Up;
+                }
+                else if (distance.y < 0)
+                {
+                    swipeDirection = (int)Directions.Down;
+                }
             }
         }
-        else if (Mathf.Abs(distance.x) < Mathf.Abs(distance.y))
+        else // if you used arrow controls to mock a swipe
         {
-            if (distance.y > 0)
-            {
-                swipeDirection = (int)Directions.Up;
-            }
-            else if (distance.y < 0)
-            {
-                swipeDirection = (int)Directions.Down;
-            }
+            swipeDirection = (int)passedInDirectionFromKeyboardControls;
+            //Debug.Log(swipeDirection);
         }
+        
 
         // if the player swipes the wrong direction
         if(swipesToClearThisTile[numberOfPlayerSwipesForTheCurrentTile] != swipeDirection)
