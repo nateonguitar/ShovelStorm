@@ -43,7 +43,7 @@ public class MapManager : MonoBehaviour {
         {
             PlayerPrefs.SetInt("levelChosenFromMap", level);
             PlayerPrefs.SetInt("neighborhoodChosenFromMap", neighborhood);
-            SceneManager.LoadScene("GamePlayLevel");
+            SceneManager.LoadScene("GamePlayLevel", LoadSceneMode.Single);
         }
     }
 }
