@@ -59,7 +59,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
         {
             if (timeSinceCurrentCellStarted >= cellDurations[currentCell] && !readyToSwitchCells)
             {
-                Debug.Log("Check " + 1);
+                //Debug.Log("Check " + 1);
                 readyToSwitchCells = true;
             }
 
@@ -68,11 +68,11 @@ public class CameraMovementNewGameScene : MonoBehaviour {
             // if we are ready to darken the screen between cells
             if (readyToSwitchCells && !transitioningDarkBetweenCells && !transitioningLightBetweenCells)
             {
-                Debug.Log("Check " + 2);
+                //Debug.Log("Check " + 2);
                 // start the transition between cells: dark then light
                 transitioningDarkBetweenCells = true;
-                Debug.Log(timeSinceTransitionBetweenCellsStarted);
-                Debug.Log(timeToTransitionBetweenCells / 2);
+                //Debug.Log(timeSinceTransitionBetweenCellsStarted);
+                //Debug.Log(timeToTransitionBetweenCells / 2);
             }
 
             // transitioning darker between cells
@@ -85,11 +85,11 @@ public class CameraMovementNewGameScene : MonoBehaviour {
             {
 
 
-                Debug.Log("Check " + 3);
+                //Debug.Log("Check " + 3);
                 float opacity = timeSinceTransitionBetweenCellsStarted / (timeToTransitionBetweenCells / 2);
                 timeSinceTransitionBetweenCellsStarted += Time.deltaTime;
-                Debug.Log(timeSinceTransitionBetweenCellsStarted);
-                Debug.Log(timeToTransitionBetweenCells / 2);
+                //Debug.Log(timeSinceTransitionBetweenCellsStarted);
+                //Debug.Log(timeToTransitionBetweenCells / 2);
                 sceneTransitioner.color = new Color(
                     sceneTransitioner.color.r,
                     sceneTransitioner.color.g,
@@ -100,7 +100,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
                 // test if we need to flip to transitioning lighter
                 if (timeSinceTransitionBetweenCellsStarted >= timeToTransitionBetweenCells / 2)
                 {
-                    Debug.Log("Check " + 4);
+                    //Debug.Log("Check " + 4);
                     // make sure the scene went completely black at the end of the darkening
                     sceneTransitioner.color = new Color(
                         sceneTransitioner.color.r,
@@ -139,8 +139,8 @@ public class CameraMovementNewGameScene : MonoBehaviour {
                 && transitioningLightBetweenCells
                 && timeSinceTransitionBetweenCellsStarted >= timeToTransitionBetweenCells / 2)
             {
-                Debug.Log("Check " + 5);
-                Debug.Log(timeSinceTransitionBetweenCellsStarted);
+                //Debug.Log("Check " + 5);
+                //Debug.Log(timeSinceTransitionBetweenCellsStarted);
                 timeSinceTransitionBetweenCellsStarted += Time.deltaTime;
                 float opacity = 2 - timeSinceTransitionBetweenCellsStarted / (timeToTransitionBetweenCells / 2);
 
@@ -154,7 +154,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
                 // test if we need to stop transitioning lighter
                 if (timeSinceTransitionBetweenCellsStarted >= timeToTransitionBetweenCells)
                 {
-                    Debug.Log("Check " + 6);
+                    //Debug.Log("Check " + 6);
                     // make sure the scene went completely clear at the end of the lightening
                     sceneTransitioner.color = new Color(
                         sceneTransitioner.color.r,
