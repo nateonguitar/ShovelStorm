@@ -39,6 +39,13 @@ public class GamePlayController : MonoBehaviour {
     public float maxTime = 0.5f;
     public float minSwipeDist = 50f;
 
+
+    //public GameObject SnowMove;
+    //public float minScaleTile = 0f; //for scaling tiles
+    //public float maxScaleTile = 1f;
+    //private float targetPoint;
+    //private Vector3 tileScaling;
+
     float startTime;
     float endTime;
 
@@ -150,7 +157,11 @@ public class GamePlayController : MonoBehaviour {
 
     void clearRow()
     {
-
+        //if (targetPoint > minScaleTile)
+        //{
+        //    tileScaling = new Vector3(1f, 1f, targetPoint - 2f);
+        //    SnowMove.transform.localScale += tileScaling; 
+        //}
     }
 
     Directions checkForKeyboardArrowControls()
