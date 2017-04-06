@@ -40,11 +40,15 @@ public class GamePlayController : MonoBehaviour {
     public float minSwipeDist = 50f;
 
 
-    //public GameObject SnowMove;
-    //public float minScaleTile = 0f; //for scaling tiles
-    //public float maxScaleTile = 1f;
-    //private float targetPoint;
-    //private Vector3 tileScaling;
+    public GameObject SnowMove;
+    public float minScaleTile = 0f; //for scaling tiles
+    public float maxScaleTile = 1f;
+    private float targetPoint;
+    private Vector3 tileOriginalScale;
+    private Vector3 tileScaling;
+
+    public int baseNumberOfRows = 5;
+    private int numberOfRowsOnThisLevel;
 
     float startTime;
     float endTime;
@@ -64,6 +68,9 @@ public class GamePlayController : MonoBehaviour {
         neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
         difficultyLevel = levelChosenFromMap * neighborhoodChosenFromMap;
         shovelLevel = PlayerPrefs.GetInt("shovelLevel");
+
+        numberOfRowsOnThisLevel = baseNumberOfRows + neighborhoodChosenFromMap;
+        tileOriginalScale = SnowMove.transform.localScale;
 
         freezeTimerController = GameObject.FindWithTag("GamePlayController").GetComponent<FreezeTimerController>();
         freezeTimerController.ResetTimer();
@@ -140,6 +147,7 @@ public class GamePlayController : MonoBehaviour {
                                 // increment the cell the player is on
                                 // reset the freeze timer
                                 readyUpNextTile();
+                               
                             }
                         }
                     }
@@ -158,10 +166,11 @@ public class GamePlayController : MonoBehaviour {
     void clearRow()
     {
         //if (targetPoint > minScaleTile)
-        //{
-        //    tileScaling = new Vector3(1f, 1f, targetPoint - 2f);
-        //    SnowMove.transform.localScale += tileScaling; 
-        //}
+        float scaleFactor = (float)1 / (float)numberOfRowsOnThisLevel;
+        float newSnowHeight = tileOriginalScale.z - (scaleFactor * tilePlayerIsOn);
+        Debug.Log(tileOriginalScale.z);
+        SnowMove.transform.localScale = new Vector3(tileOriginalScale.x, tileOriginalScale.y, newSnowHeight);
+        Debug.Log(numberOfRowsOnThisLevel);
     }
 
     Directions checkForKeyboardArrowControls()
@@ -196,6 +205,7 @@ public class GamePlayController : MonoBehaviour {
         numberOfPlayerSwipesForTheCurrentTile = 0;
         playerSwipes.text = "";
         tilePlayerIsOn++;
+        clearRow();
         buildSwipes();
         freezeTimerController.ResetTimer();
     }
