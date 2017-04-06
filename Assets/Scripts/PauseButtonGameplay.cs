@@ -19,27 +19,39 @@ public class PauseButtonGameplay : MonoBehaviour {
     {
         if (!pauseWindowShown)
         {
-            pauseWindowPanel.SetActive(true);
-            pauseWindowShown = true;
-            Time.timeScale = 0f;
-            gamePlayController.gamePaused = true;
+            pause();
         }
         else
         {
-            pauseWindowPanel.SetActive(false);
-            pauseWindowShown = false;
-            Time.timeScale = 1f;
-            gamePlayController.gamePaused = false;
+            unPause();
         }
     }
 
     public void backToMap()
     {
+        unPause();
         SceneManager.LoadScene("LevelSelectMap");
     }
 
     public void quitGame()
     {
+        unPause();
         SceneManager.LoadScene("StartMenu");
+    }
+
+    private void pause()
+    {
+        pauseWindowPanel.SetActive(true);
+        pauseWindowShown = true;
+        Time.timeScale = 0f;
+        gamePlayController.gamePaused = true;
+    }
+
+    private void unPause()
+    {
+        pauseWindowPanel.SetActive(false);
+        pauseWindowShown = false;
+        Time.timeScale = 1f;
+        gamePlayController.gamePaused = false;
     }
 }

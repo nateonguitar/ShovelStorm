@@ -55,10 +55,11 @@ public class GamePlayController : MonoBehaviour {
     float swipeDistance;
     float swipeTime;
 
-    public bool gamePaused = false;
+    public bool gamePaused;
 
     void Start()
     {
+        gamePaused = false;
         levelChosenFromMap = PlayerPrefs.GetInt("levelChosenFromMap");
         neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
         difficultyLevel = levelChosenFromMap * neighborhoodChosenFromMap;
@@ -77,7 +78,7 @@ public class GamePlayController : MonoBehaviour {
     
     void Update()
     {
-        if (gamePlayReadyStartAnimator.finished)
+        if (gamePlayReadyStartAnimator.finished && !gameOver)
         {
             if (!gamePaused)
             {
