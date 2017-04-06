@@ -41,11 +41,8 @@ public class GamePlayController : MonoBehaviour {
 
 
     public GameObject SnowMove;
-    public float minScaleTile = 0f; //for scaling tiles
-    public float maxScaleTile = 1f;
     private float targetPoint;
     private Vector3 tileOriginalScale;
-    private Vector3 tileScaling;
 
     public int baseNumberOfRows = 5;
     private int numberOfRowsOnThisLevel;
@@ -60,6 +57,7 @@ public class GamePlayController : MonoBehaviour {
     float swipeTime;
 
     public bool gamePaused;
+    private bool gameWon = false;
 
     void Start()
     {
@@ -103,6 +101,13 @@ public class GamePlayController : MonoBehaviour {
                         // increment the cell the player is on
                         // reset the freeze timer
                         readyUpNextTile();
+
+                        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
+                        {
+                            gameWon = true;
+                            gameOver = true;
+                        }
+                        
                     }
                 }
 
@@ -160,6 +165,14 @@ public class GamePlayController : MonoBehaviour {
         if (gameOver)
         {
             //Debug.Log("GameOver");
+            if(gameWon)
+            {
+                Debug.Log(gameWon);
+            }
+            else
+            {
+                Debug.Log(gameWon);
+            }
         }
     }
 
@@ -168,9 +181,9 @@ public class GamePlayController : MonoBehaviour {
         //if (targetPoint > minScaleTile)
         float scaleFactor = (float)1 / (float)numberOfRowsOnThisLevel;
         float newSnowHeight = tileOriginalScale.z - (scaleFactor * tilePlayerIsOn);
-        Debug.Log(tileOriginalScale.z);
+        
         SnowMove.transform.localScale = new Vector3(tileOriginalScale.x, tileOriginalScale.y, newSnowHeight);
-        Debug.Log(numberOfRowsOnThisLevel);
+        
     }
 
     Directions checkForKeyboardArrowControls()
@@ -220,7 +233,7 @@ public class GamePlayController : MonoBehaviour {
         // if you swiped
         if (passedInDirectionFromKeyboardControls == Directions.None)
         {
-            Debug.Log("SwipeControls");
+            //Debug.Log("SwipeControls");
             if (Mathf.Abs(distance.x) > Mathf.Abs(distance.y))
             {
                 if (distance.x > 0)
@@ -289,7 +302,7 @@ public class GamePlayController : MonoBehaviour {
 
     private void buildSwipes()
     {
-        Debug.Log("building swipes");
+        
         
         swipesNeeded.text = "";
         
