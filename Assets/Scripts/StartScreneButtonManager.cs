@@ -10,9 +10,10 @@ public class StartScreneButtonManager : MonoBehaviour {
         PlayerPrefs.SetInt("shovelLevel", 1);
         PlayerPrefs.SetInt("unlockedNeighborhood", 1);
         PlayerPrefs.SetInt("unlockedLevel", 1);
+        PlayerPrefs.SetInt("playingFinalLevelInNeighborhood", 0);
         PlayerPrefs.SetInt("levelChosenFromMap", 1);
         PlayerPrefs.SetInt("neighborhoodChosenFromMap", 1);
-        PlayerPrefs.SetInt("currency", 0);
+        PlayerPrefs.SetInt("money", 0);
 
         PlayerPrefs.Save();
 

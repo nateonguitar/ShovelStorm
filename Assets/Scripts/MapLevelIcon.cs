@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class MapLevelIcon: MonoBehaviour {
     public int level = 1;
     public int neighborhood = 1;
+    [Range(0, 1)]
+    public int finalLevelInThisNeighborhood = 0;
 
     void Start()
     {
@@ -16,6 +18,6 @@ public class MapLevelIcon: MonoBehaviour {
 
     void handleClick()
     {
-        GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>().attemptToStartLevel(level, neighborhood);
+        GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>().attemptToStartLevel(level, neighborhood, finalLevelInThisNeighborhood);
     }
 }
