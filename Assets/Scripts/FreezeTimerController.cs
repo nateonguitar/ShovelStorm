@@ -10,6 +10,7 @@ public class FreezeTimerController : MonoBehaviour {
     private float modifier;
     private GamePlayController gameController;
     GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
+    bool paused = false;
 
     void Start()
     {
@@ -21,7 +22,7 @@ public class FreezeTimerController : MonoBehaviour {
 	
 	void FixedUpdate ()
     {
-        if (gamePlayReadyStartAnimator.finished)
+        if (gamePlayReadyStartAnimator.finished && !paused)
         {
             if (currentPosition <= 1)
             {
@@ -40,5 +41,15 @@ public class FreezeTimerController : MonoBehaviour {
     public void ResetTimer()
     {
         currentPosition = 0;
+    }
+
+    public void PauseTimer()
+    {
+        paused = true;
+    }
+
+    public void UnPauseTimer()
+    {
+        paused = false;
     }
 }

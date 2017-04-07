@@ -5,15 +5,19 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour {
+    public Text moneyText;
+
     GameObject[] levelIcons;
     int unlockedLevel;
     int unlockedNeighborhood;
+
 
     // set in the editor
     // public Text displayTouchesText;
 
     void Start()
     {
+        moneyText.text = "$" + PlayerPrefs.GetInt("money");
         // fill our levelIcons with all of the level icons placed on the map in the editor
         levelIcons = GameObject.FindGameObjectsWithTag("MapLevelIcon");
 
@@ -37,13 +41,29 @@ public class MapManager : MonoBehaviour {
         }
     }
     
-    public void attemptToStartLevel(int level, int neighborhood)
+    public void attemptToStartLevel(int level, int neighborhood, int finalLevelInThisNeighborhood)
     {
         if(level <= unlockedLevel && neighborhood <= unlockedNeighborhood)
         {
             PlayerPrefs.SetInt("levelChosenFromMap", level);
             PlayerPrefs.SetInt("neighborhoodChosenFromMap", neighborhood);
+            PlayerPrefs.SetInt("playingFinalLevelInNeighborhood", finalLevelInThisNeighborhood);
             SceneManager.LoadScene("GamePlayLevel", LoadSceneMode.Single);
         }
+    }
+
+    public void backToStartMenu()
+    {
+        SceneManager.LoadScene("StartMenu");
+    }
+
+    public void loadStoreScene()
+    {
+        SceneManager.LoadScene("Store");
+    }
+
+    public void loadStatusScene()
+    {
+        SceneManager.LoadScene("Status");
     }
 }
