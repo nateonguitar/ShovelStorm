@@ -6,6 +6,14 @@ using UnityEngine.SceneManagement;
 public class StartScreneButtonManager : MonoBehaviour {
     public GameObject confirmNewGamePanel;
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     public void StartNewGame()
     {
         PlayerPrefs.DeleteAll();

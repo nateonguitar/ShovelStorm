@@ -36,6 +36,14 @@ public class GameplayMenus : MonoBehaviour {
         gamePlayController = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayController>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            onPauseButtonTouch();
+        }
+    }
+
     public void hideMenusForGameStart()
     {
         winLosePanel.SetActive(false);
