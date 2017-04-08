@@ -117,13 +117,7 @@ public class GamePlayController : MonoBehaviour {
                         // increment the cell the player is on
                         // reset the freeze timer
                         readyUpNextTile();
-
-                        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
-                        {
-                            gameWon = true;
-                            gameOver = true;
-                        }
-                        
+                        checkForWinCondition();
                     }
                 }
 
@@ -168,7 +162,7 @@ public class GamePlayController : MonoBehaviour {
                                 // increment the cell the player is on
                                 // reset the freeze timer
                                 readyUpNextTile();
-                               
+                                checkForWinCondition();
                             }
                         }
                     }
@@ -250,6 +244,15 @@ public class GamePlayController : MonoBehaviour {
         clearRow();
         buildSwipes();
         freezeTimerController.ResetTimer();
+    }
+
+    void checkForWinCondition()
+    {
+        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
+        {
+            gameWon = true;
+            gameOver = true;
+        }
     }
 
     void swipe(Directions passedInDirectionFromKeyboardControls = Directions.None)

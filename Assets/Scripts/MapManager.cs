@@ -40,6 +40,14 @@ public class MapManager : MonoBehaviour {
             }
         }
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            backToStartMenu();
+        }
+    }
     
     public void attemptToStartLevel(int level, int neighborhood, int finalLevelInThisNeighborhood)
     {
