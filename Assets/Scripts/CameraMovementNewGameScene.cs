@@ -53,7 +53,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
 
         if(currentCell >= cells.Count)
         {
-            SceneManager.LoadScene("LevelSelectMap");
+            SceneManager.LoadScene("Neighborhood001");
         }
         else
         {

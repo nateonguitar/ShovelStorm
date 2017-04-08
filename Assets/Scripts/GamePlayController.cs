@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GamePlayController : MonoBehaviour {
-    FreezeTimerController freezeTimerController;
-    GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
-
+    public GameObject winLosePanel;
     public Text swipesNeeded;
     public Text playerSwipes;
+
+    FreezeTimerController freezeTimerController;
+    GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
+    GameplayMenus gameplayMenus;
+    
 
     public enum Directions
     {
@@ -28,7 +31,7 @@ public class GamePlayController : MonoBehaviour {
     int neighborhoodChosenFromMap;
     int difficultyLevel;
     int shovelLevel;
-    private bool tileFinished = false;
+    int money;
     public bool gameOver = false;
     private int numberOfSwipesNeededToCompleteCurrentTile;
 
@@ -44,7 +47,7 @@ public class GamePlayController : MonoBehaviour {
     private float targetPoint;
     private Vector3 tileOriginalScale;
 
-    public int baseNumberOfRows = 5;
+    public int baseNumberOfRows = 2;
     private int numberOfRowsOnThisLevel;
 
     float startTime;
@@ -58,15 +61,24 @@ public class GamePlayController : MonoBehaviour {
 
     public bool gamePaused;
     private bool gameWon = false;
+    private bool winLosePanelShown = false;
 
     void Start()
     {
+        gameplayMenus = gameObject.GetComponent<GameplayMenus>();
+        gameplayMenus.hideMenusForGameStart();        
+
+        // when restarting the level we need to make sure the game is not paused
         gamePaused = false;
+
+        // get information from PlayerPrefs
         levelChosenFromMap = PlayerPrefs.GetInt("levelChosenFromMap");
         neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
-        difficultyLevel = levelChosenFromMap * neighborhoodChosenFromMap;
         shovelLevel = PlayerPrefs.GetInt("shovelLevel");
+        money = PlayerPrefs.GetInt("money");
 
+        // calculate how the level should act
+        difficultyLevel = levelChosenFromMap * neighborhoodChosenFromMap;
         numberOfRowsOnThisLevel = baseNumberOfRows + neighborhoodChosenFromMap;
         tileOriginalScale = SnowMove.transform.localScale;
 
@@ -75,9 +87,12 @@ public class GamePlayController : MonoBehaviour {
 
         gamePlayReadyStartAnimator = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayReadyStartAnimator>();
 
+        // display the Ready/Start at the beginning of the level
         gamePlayReadyStartAnimator.StartAnimation();
+
         buildSwipes();
         playerSwipes.text = "";
+        freezeTimerController.UnPauseTimer();
     }
 
     
@@ -101,13 +116,7 @@ public class GamePlayController : MonoBehaviour {
                         // increment the cell the player is on
                         // reset the freeze timer
                         readyUpNextTile();
-
-                        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
-                        {
-                            gameWon = true;
-                            gameOver = true;
-                        }
-                        
+                        checkForWinCondition();
                     }
                 }
 
@@ -152,7 +161,7 @@ public class GamePlayController : MonoBehaviour {
                                 // increment the cell the player is on
                                 // reset the freeze timer
                                 readyUpNextTile();
-                               
+                                checkForWinCondition();
                             }
                         }
                     }
@@ -162,17 +171,30 @@ public class GamePlayController : MonoBehaviour {
         
 
 
-        if (gameOver)
+        if (gameOver && !winLosePanelShown)
         {
-            //Debug.Log("GameOver");
+            freezeTimerController.PauseTimer();
+
             if(gameWon)
             {
-                Debug.Log(gameWon);
+                // give the player their reward for winning
+                // and show the win screne!
+
+                // money was previously set from PlayerPrefs.GetInt("money")
+                // lets add to it and save it
+                int moneyEarned = difficultyLevel * 10;
+                money += moneyEarned;
+                PlayerPrefs.SetInt("money", money);
+
+                gameplayMenus.setMoney(moneyEarned);
+                gameplayMenus.showDrivewayCleared();
+                
             }
             else
             {
-                Debug.Log(gameWon);
+                gameplayMenus.showYouFrozeToDeath();
             }
+            winLosePanelShown = true;
         }
     }
 
@@ -221,6 +243,15 @@ public class GamePlayController : MonoBehaviour {
         clearRow();
         buildSwipes();
         freezeTimerController.ResetTimer();
+    }
+
+    void checkForWinCondition()
+    {
+        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
+        {
+            gameWon = true;
+            gameOver = true;
+        }
     }
 
     void swipe(Directions passedInDirectionFromKeyboardControls = Directions.None)

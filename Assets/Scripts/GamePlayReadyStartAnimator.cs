@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GamePlayReadyStartAnimator : MonoBehaviour {
+    public GameObject readyStartTextParent;
     public float showReadyDuration = 1.5f;
     public float showStartDuration = 1.5f;
     public bool finished = false;
@@ -17,7 +18,8 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
 
     void Start()
     {
-        readyStartText = GameObject.FindWithTag("GamePlayReadyStartText").GetComponent<Text>();
+        readyStartTextParent.SetActive(true);
+        readyStartText = readyStartTextParent.GetComponent<Text>();
     }
 
     public void StartAnimation()
@@ -63,6 +65,8 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
                 finished = true;
                 readyStartText.text = "";
                 gameObject.GetComponent<GamePlayReadyStartAnimator>().enabled = false;
+
+                readyStartTextParent.SetActive(false);
             }
         }
 
