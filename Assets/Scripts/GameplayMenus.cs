@@ -85,7 +85,7 @@ public class GameplayMenus : MonoBehaviour {
     public void backToMap()
     {
         unPause();
-        SceneManager.LoadScene("LevelSelectMap");
+        SceneManager.LoadScene("Neighborhood" + PlayerPrefs.GetInt("unlockedNeighborhood").ToString().PadLeft(3, '0'));
     }
 
     public void backToStartMenu()
@@ -138,16 +138,21 @@ public class GameplayMenus : MonoBehaviour {
         int unlockedNeighborhood = PlayerPrefs.GetInt("unlockedNeighborhood");
         int unlockedLevel = PlayerPrefs.GetInt("unlockedLevel");
         int playingFinalLevelInNeighborhood = PlayerPrefs.GetInt("playingFinalLevelInNeighborhood");
+        int levelChosenFromMap = PlayerPrefs.GetInt("levelChosenFromMap");
+        int neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
 
         // if they beat the final level in the neighborhood allow the next
-        if(playingFinalLevelInNeighborhood == 1)
+        if (playingFinalLevelInNeighborhood == 1)
         {
             unlockedNeighborhood++;
             unlockedLevel = 1;
         }
         else
         {
-            unlockedLevel++;
+            if(levelChosenFromMap == unlockedLevel)
+            {
+                unlockedLevel++;
+            }
         }
 
         PlayerPrefs.SetInt("unlockedNeighborhood", unlockedNeighborhood);
@@ -155,6 +160,6 @@ public class GameplayMenus : MonoBehaviour {
         PlayerPrefs.SetInt("playingFinalLevelInNeighborhood", 0);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene("LevelSelectMap");
+        SceneManager.LoadScene("Neighborhood" + PlayerPrefs.GetInt("unlockedNeighborhood").ToString().PadLeft(3, '0'));
     }
 }

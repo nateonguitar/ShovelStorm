@@ -18,6 +18,8 @@ public class MapLevelIcon: MonoBehaviour {
 
     void handleClick()
     {
+        PlayerPrefs.SetInt("levelChosenFromMap", level);
+        PlayerPrefs.SetInt("neighborhoodChosenFromMap", neighborhood);
         GameObject.FindGameObjectWithTag("MapManager").GetComponent<MapManager>().attemptToStartLevel(level, neighborhood, finalLevelInThisNeighborhood);
     }
 }

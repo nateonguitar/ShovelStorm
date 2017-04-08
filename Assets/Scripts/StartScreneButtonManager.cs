@@ -50,7 +50,7 @@ public class StartScreneButtonManager : MonoBehaviour {
         {
             return;
         }
-        SceneManager.LoadScene("LevelSelectMap");
+        SceneManager.LoadScene("Neighborhood" + PlayerPrefs.GetInt("unlockedNeighborhood").ToString().PadLeft(3, '0'));
     }
 
     public void endGame()

@@ -32,7 +32,6 @@ public class GamePlayController : MonoBehaviour {
     int difficultyLevel;
     int shovelLevel;
     int money;
-    private bool tileFinished = false;
     public bool gameOver = false;
     private int numberOfSwipesNeededToCompleteCurrentTile;
 
@@ -48,7 +47,7 @@ public class GamePlayController : MonoBehaviour {
     private float targetPoint;
     private Vector3 tileOriginalScale;
 
-    public int baseNumberOfRows = 5;
+    public int baseNumberOfRows = 2;
     private int numberOfRowsOnThisLevel;
 
     float startTime;
