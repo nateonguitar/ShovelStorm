@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class GamePlayController : MonoBehaviour {
     public GameObject winLosePanel;
-    public Text swipesNeeded;
-    public Text playerSwipes;
 
     FreezeTimerController freezeTimerController;
     GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
@@ -116,13 +114,7 @@ public class GamePlayController : MonoBehaviour {
          
         }
 
-        //for (int i = 0; i < swipesToClearThisTileArrows.Count; i++)
-        //{
-        //    swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 60f));
-        //}
-
         buildSwipes();
-        playerSwipes.text = "";
         freezeTimerController.UnPauseTimer();
     }
 
@@ -268,8 +260,8 @@ public class GamePlayController : MonoBehaviour {
 
     void readyUpNextTile()
     {
+        makeAllArrowsBigAgain();
         numberOfPlayerSwipesForTheCurrentTile = 0;
-        playerSwipes.text = "";
         tilePlayerIsOn++;
         clearRow();
         buildSwipes();
@@ -278,7 +270,8 @@ public class GamePlayController : MonoBehaviour {
 
     void checkForWinCondition()
     {
-        if (tilePlayerIsOn > numberOfRowsOnThisLevel)
+        // tilePlayerIsOn was incremented before this check
+        if (tilePlayerIsOn >= numberOfRowsOnThisLevel)
         {
             gameWon = true;
             gameOver = true;
@@ -330,11 +323,7 @@ public class GamePlayController : MonoBehaviour {
         if(swipesToClearThisTile[numberOfPlayerSwipesForTheCurrentTile] != swipeDirection)
         {
             // start their swiping over for this tile
-            playerSwipes.text = "";
-            for (int i = 0; i < swipesToClearThisTileArrows.Count; i++)
-            {
-                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            }
+            makeAllArrowsBigAgain();
             numberOfPlayerSwipesForTheCurrentTile = 0;
         }
         else
@@ -344,22 +333,19 @@ public class GamePlayController : MonoBehaviour {
 
             if (swipeDirection == (int)Directions.Up)
             {
-                playerSwipes.text += "Up ";
                 swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Down)
             {
-                playerSwipes.text += "Down ";
                 swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Left)
             {
-                playerSwipes.text += "Left ";
                 swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Right)
             {
-                playerSwipes.text += "Right ";
+
                 swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             numberOfPlayerSwipesForTheCurrentTile++;
@@ -367,15 +353,17 @@ public class GamePlayController : MonoBehaviour {
         
     }
 
+    private void makeAllArrowsBigAgain()
+    {
+        for (int i = 0; i < swipesToClearThisTileArrows.Count; i++)
+        {
+            swipesToClearThisTileArrows[i].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            swipesToClearThisTileArrows[i].GetComponent<Renderer>().material.color = Color.green;
+        }
+    }
     // Use this for initialization
-    
-
     private void buildSwipes()
     {
-        
-        
-        
-        
         numberOfSwipesNeededToCompleteCurrentTile = 3 + difficultyLevel - (shovelLevel * 2) + (tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
         
 
