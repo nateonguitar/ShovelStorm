@@ -139,7 +139,6 @@ public class GameplayMenus : MonoBehaviour {
         int unlockedLevel = PlayerPrefs.GetInt("unlockedLevel");
         int playingFinalLevelInNeighborhood = PlayerPrefs.GetInt("playingFinalLevelInNeighborhood");
         int levelChosenFromMap = PlayerPrefs.GetInt("levelChosenFromMap");
-        int neighborhoodChosenFromMap = PlayerPrefs.GetInt("neighborhoodChosenFromMap");
 
         // if they beat the final level in the neighborhood allow the next
         if (playingFinalLevelInNeighborhood == 1)

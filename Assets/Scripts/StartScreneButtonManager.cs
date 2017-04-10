@@ -61,6 +61,7 @@ public class StartScreneButtonManager : MonoBehaviour {
 
         PlayerPrefs.SetInt("difficultyLevel", 1);
         PlayerPrefs.SetInt("shovelLevel", 1);
+        PlayerPrefs.SetInt("coatLevel", 1);
         PlayerPrefs.SetInt("unlockedNeighborhood", 1);
         PlayerPrefs.SetInt("unlockedLevel", 1);
         PlayerPrefs.SetInt("playingFinalLevelInNeighborhood", 0);
