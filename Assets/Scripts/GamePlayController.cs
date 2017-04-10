@@ -21,10 +21,11 @@ public class GamePlayController : MonoBehaviour {
         Right = 3,
         None = 4
     }
-
-
+  
 
     int[] swipesToClearThisTile = new int[100];
+    List<GameObject> swipesToClearThisTileArrows = new List<GameObject> ();
+    public GameObject arrowPrefab;
     int[] playerSwipesForThisTile = new int[100];
     int numberOfPlayerSwipesForTheCurrentTile = 0;
     int levelChosenFromMap;
@@ -63,11 +64,11 @@ public class GamePlayController : MonoBehaviour {
     private bool gameWon = false;
     private bool winLosePanelShown = false;
 
+
     void Start()
     {
         gameplayMenus = gameObject.GetComponent<GameplayMenus>();
-        gameplayMenus.hideMenusForGameStart();        
-
+        gameplayMenus.hideMenusForGameStart();
         // when restarting the level we need to make sure the game is not paused
         gamePaused = false;
 
@@ -89,6 +90,36 @@ public class GamePlayController : MonoBehaviour {
 
         // display the Ready/Start at the beginning of the level
         gamePlayReadyStartAnimator.StartAnimation();
+
+        Vector3 arrowsStartingPoint = new Vector3(-2.5f, 0.5f, 2.5f);
+        float spaceBetweenEachArrow = 1.9f;
+        int arrowsPerRow = 6;
+        int numberOfRows = 3;
+
+        for (int i = 0; i < numberOfRows; i++)
+        {
+            for (int j = 0; j < arrowsPerRow; j++)
+            {
+                swipesToClearThisTileArrows.Add(
+                    Instantiate(
+                        arrowPrefab, 
+                        new Vector3(
+                            arrowsStartingPoint.x + spaceBetweenEachArrow * (float)j, 
+                            arrowsStartingPoint.y,
+                            arrowsStartingPoint.z - spaceBetweenEachArrow * (float)i
+                        ),
+                        Quaternion.Euler(new Vector3(90f, 0f, 0f))
+                        
+                    )
+                );
+            }
+         
+        }
+
+        //for (int i = 0; i < swipesToClearThisTileArrows.Count; i++)
+        //{
+        //    swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 60f));
+        //}
 
         buildSwipes();
         playerSwipes.text = "";
@@ -300,6 +331,10 @@ public class GamePlayController : MonoBehaviour {
         {
             // start their swiping over for this tile
             playerSwipes.text = "";
+            for (int i = 0; i < swipesToClearThisTileArrows.Count; i++)
+            {
+                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            }
             numberOfPlayerSwipesForTheCurrentTile = 0;
         }
         else
@@ -310,18 +345,22 @@ public class GamePlayController : MonoBehaviour {
             if (swipeDirection == (int)Directions.Up)
             {
                 playerSwipes.text += "Up ";
+                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Down)
             {
                 playerSwipes.text += "Down ";
+                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Left)
             {
                 playerSwipes.text += "Left ";
+                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             else if (swipeDirection == (int)Directions.Right)
             {
                 playerSwipes.text += "Right ";
+                swipesToClearThisTileArrows[numberOfPlayerSwipesForTheCurrentTile].transform.localScale = new Vector3(.5f, .5f, .5f);
             }
             numberOfPlayerSwipesForTheCurrentTile++;
         }
@@ -335,7 +374,7 @@ public class GamePlayController : MonoBehaviour {
     {
         
         
-        swipesNeeded.text = "";
+        
         
         numberOfSwipesNeededToCompleteCurrentTile = 3 + difficultyLevel - (shovelLevel * 2) + (tilePlayerIsOn / numberOfTilesTilDifficultyIncrease);
         
@@ -353,23 +392,29 @@ public class GamePlayController : MonoBehaviour {
             if (swipe == (int) Directions.Up)
             {
                 swipesToClearThisTile[i] = (int) Directions.Up;
-                swipesNeeded.text += "Up ";
+                swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 90f));
             }
             else if (swipe == (int)Directions.Down)
             {
                 swipesToClearThisTile[i] = (int)Directions.Down;
-                swipesNeeded.text += "Down ";
+                swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 270f));
             }
             else if (swipe == (int)Directions.Left)
             {
                 swipesToClearThisTile[i] = (int)Directions.Left;
-                swipesNeeded.text += "Left ";
+                swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 180f));
             }
             else if (swipe == (int)Directions.Right)
             {
                 swipesToClearThisTile[i] = (int)Directions.Right;
-                swipesNeeded.text += "Right ";
+                swipesToClearThisTileArrows[i].transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
             }
+            swipesToClearThisTileArrows[i].SetActive(true);
+        }
+
+        for (int i = numberOfSwipesNeededToCompleteCurrentTile; i < swipesToClearThisTileArrows.Count; i++)
+        {
+            swipesToClearThisTileArrows[i].SetActive(false);
         }
     }
 }
