@@ -20,7 +20,8 @@ public class GamePlayController : MonoBehaviour {
         Right = 3,
         None = 4
     }
-  
+
+    public GameObject Player;
 
     int[] swipesToClearThisTile = new int[100];
     List<GameObject> swipesToClearThisTileArrows = new List<GameObject> ();

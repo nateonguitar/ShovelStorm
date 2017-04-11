@@ -10,6 +10,8 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
     public bool finished = false;
     Text readyStartText;
 
+    public GameObject Player;
+
     private bool animating = false;
     private bool showingReady = false;
     private bool showingStart = false;
@@ -65,6 +67,7 @@ public class GamePlayReadyStartAnimator : MonoBehaviour {
                 finished = true;
                 readyStartText.text = "";
                 gameObject.GetComponent<GamePlayReadyStartAnimator>().enabled = false;
+                Player.GetComponent<CharacterMove>().StartCharacterAnimator();
 
                 readyStartTextParent.SetActive(false);
             }
