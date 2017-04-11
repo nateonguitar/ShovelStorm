@@ -16,6 +16,7 @@ public class GameplayMenus : MonoBehaviour {
     public GameObject winLosePanelContinue;
 
     GamePlayController gamePlayController;
+    MusicManager musicManager;
     bool pauseWindowShown = false;
     int money = 0;
 
@@ -34,6 +35,7 @@ public class GameplayMenus : MonoBehaviour {
         winLosePanelMoneyEarnedOriginalSize = winLosePanelMoneyEarned.transform.localScale;
 
         gamePlayController = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayController>();
+        musicManager = GameObject.FindWithTag("GamePlayController").GetComponent<MusicManager>();
     }
 
     void Update()
@@ -85,7 +87,9 @@ public class GameplayMenus : MonoBehaviour {
     public void backToMap()
     {
         unPause();
+        musicManager.startMenuMusicBackUp();
         SceneManager.LoadScene("Neighborhood" + PlayerPrefs.GetInt("unlockedNeighborhood").ToString().PadLeft(3, '0'));
+        
     }
 
     public void backToStartMenu()
@@ -158,7 +162,9 @@ public class GameplayMenus : MonoBehaviour {
         PlayerPrefs.SetInt("unlockedLevel", unlockedLevel);
         PlayerPrefs.SetInt("playingFinalLevelInNeighborhood", 0);
         PlayerPrefs.Save();
-
+        musicManager.startMenuMusicBackUp();
         SceneManager.LoadScene("Neighborhood" + PlayerPrefs.GetInt("unlockedNeighborhood").ToString().PadLeft(3, '0'));
+        
+
     }
 }
