@@ -9,7 +9,8 @@ public class GamePlayController : MonoBehaviour {
     FreezeTimerController freezeTimerController;
     GamePlayReadyStartAnimator gamePlayReadyStartAnimator;
     GameplayMenus gameplayMenus;
-    
+    MusicManager musicManager;
+
 
     public enum Directions
     {
@@ -86,6 +87,8 @@ public class GamePlayController : MonoBehaviour {
         freezeTimerController.ResetTimer();
 
         gamePlayReadyStartAnimator = GameObject.FindWithTag("GamePlayController").GetComponent<GamePlayReadyStartAnimator>();
+
+        musicManager = GameObject.FindWithTag("GamePlayController").GetComponent<MusicManager>();
 
         // display the Ready/Start at the beginning of the level
         gamePlayReadyStartAnimator.StartAnimation();
@@ -212,11 +215,13 @@ public class GamePlayController : MonoBehaviour {
 
                 gameplayMenus.setMoney(moneyEarned);
                 gameplayMenus.showDrivewayCleared();
+                musicManager.playGameWinningMusic();
                 
             }
             else
             {
                 gameplayMenus.showYouFrozeToDeath();
+                musicManager.playGameLosingMusic();
             }
             winLosePanelShown = true;
         }
