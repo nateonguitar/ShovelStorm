@@ -27,7 +27,10 @@ public class MapManager : MonoBehaviour {
         neighborhoodBackName = "Neighborhood" + (neighborhood - 1).ToString().PadLeft(3, '0');
 
         neighborhoodText = GameObject.FindWithTag("MapNeighborhoodText").GetComponent<Text>();
+        neighborhoodText.color = Color.white;
+
         moneyText = GameObject.FindWithTag("MapMoneyText").GetComponent<Text>();
+        moneyText.color = Color.white;
 
         backANeighborhoodText = GameObject.FindWithTag("MapBackANeighborhoodText").GetComponent<Text>();
         backANeighborhoodButton = GameObject.FindWithTag("MapBackANeighborhoodButton");
@@ -38,6 +41,8 @@ public class MapManager : MonoBehaviour {
         // set the back and forward neighborhood buttons up
         backANeighborhoodText.text = "Neighborhood " + (neighborhood - 1).ToString();
         forwardANeighborhoodText.text = "Neighborhood " + (neighborhood + 1).ToString();
+
+
 
         // don't show "back a neighborhood" if we're on the first neighborhood
         if(neighborhood == 1)
@@ -93,6 +98,8 @@ public class MapManager : MonoBehaviour {
             }
         }
     }
+
+    
 
     void Update()
     {
