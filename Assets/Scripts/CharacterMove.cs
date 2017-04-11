@@ -5,13 +5,13 @@ using UnityEngine;
 public class CharacterMove : MonoBehaviour
 {
     Animator CharacterToMove;
-
+     
     void Start()
     {
         CharacterToMove = GetComponent<Animator>();
     }
 
-    void StartCharacterAnimator()
+    public void StartCharacterAnimator()
     {
         CharacterToMove.SetBool("IsStarted", true);
     }
