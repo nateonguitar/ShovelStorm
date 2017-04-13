@@ -21,6 +21,7 @@ public class StoreController : MonoBehaviour {
 
     void Start()
     {
+        PlayerPrefs.SetInt("money", 100000);
         currentSnowShovelLevel = PlayerPrefs.GetInt("shovelLevel");
         currentCoatLevel = PlayerPrefs.GetInt("coatLevel");
 

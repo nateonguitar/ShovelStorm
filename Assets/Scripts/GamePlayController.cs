@@ -67,6 +67,7 @@ public class GamePlayController : MonoBehaviour {
 
     void Start()
     {
+        Player.SetActive(true);
         gameplayMenus = gameObject.GetComponent<GameplayMenus>();
         gameplayMenus.hideMenusForGameStart();
         // when restarting the level we need to make sure the game is not paused
@@ -224,6 +225,7 @@ public class GamePlayController : MonoBehaviour {
                 musicManager.playGameLosingMusic();
             }
             winLosePanelShown = true;
+            Player.SetActive(false);
         }
     }
 
@@ -246,7 +248,7 @@ public class GamePlayController : MonoBehaviour {
         Player.transform.position = new Vector3(
             Player.transform.position.x,
             Player.transform.position.y,
-            SnowMove.transform.position.z + SnowMove.transform.localScale.z/2 - Player.transform.localScale.z/2
+            SnowMove.transform.position.z + SnowMove.transform.localScale.z/2 - Player.transform.localScale.z/3
         );
     }
 
