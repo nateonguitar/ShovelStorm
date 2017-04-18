@@ -18,7 +18,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
     bool readyToSwitchCells = true;
     bool transitioningDarkBetweenCells = false;
     bool transitioningLightBetweenCells = true;
-    Image sceneTransitioner;
+    public Image sceneTransitioner;
 
     public void Start()
     {
@@ -32,10 +32,17 @@ public class CameraMovementNewGameScene : MonoBehaviour {
         sceneTransitioner = GameObject.FindWithTag("SceneTransitioner").GetComponent<Image>(); ;
         cells.Add(GameObject.FindWithTag("Cell0"));
         cells.Add(GameObject.FindWithTag("Cell1"));
+        cells.Add(GameObject.FindWithTag("Cell2"));
+        cells.Add(GameObject.FindWithTag("Cell3"));
+        cells.Add(GameObject.FindWithTag("Cell4"));
         cellDurations.Add(5f);
         cellDurations.Add(4f);
         cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
         cellCameraMovements.Add(new Vector3(-2f, 4f, -9.5f));
+        cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
+        cellCameraMovements.Add(new Vector3(-2f, 4f, -9.5f));
+        cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
+
         initialPosition = transform.position;
 
         for(int i=1; i<cellDurations.Count; i++)
