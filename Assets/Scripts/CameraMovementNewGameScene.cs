@@ -9,7 +9,7 @@ public class CameraMovementNewGameScene : MonoBehaviour {
     // list.ElementAt(0)
     List<GameObject> cells = new List<GameObject>();
     Vector3 initialPosition;
-    List<Vector3> cellCameraMovements = new List<Vector3>();
+    public List<Vector3> cellCameraMovements = new List<Vector3>();
     List<float> cellDurations = new List<float>();
     float timeToTransitionBetweenCells = 5f;
     float timeSinceTransitionBetweenCellsStarted = 0;
@@ -35,13 +35,16 @@ public class CameraMovementNewGameScene : MonoBehaviour {
         cells.Add(GameObject.FindWithTag("Cell2"));
         cells.Add(GameObject.FindWithTag("Cell3"));
         cells.Add(GameObject.FindWithTag("Cell4"));
-        cellDurations.Add(5f);
+        cellDurations.Add(5f); // 5
+        cellDurations.Add(5f); // 5
+        cellDurations.Add(4f); // 4
+        cellDurations.Add(3f); // 4
         cellDurations.Add(4f);
-        cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
-        cellCameraMovements.Add(new Vector3(-2f, 4f, -9.5f));
-        cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
-        cellCameraMovements.Add(new Vector3(-2f, 4f, -9.5f));
-        cellCameraMovements.Add(new Vector3(-0.75f, 0.25f, -9.5f));
+        cellCameraMovements.Add(cellCameraMovements[0]);
+        cellCameraMovements.Add(cellCameraMovements[1]);
+        cellCameraMovements.Add(cellCameraMovements[2]);
+        cellCameraMovements.Add(cellCameraMovements[3]);
+        cellCameraMovements.Add(cellCameraMovements[4]);
 
         initialPosition = transform.position;
 
